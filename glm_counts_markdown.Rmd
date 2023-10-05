@@ -1,5 +1,19 @@
-# GLMs with Count Data - Advanced Data Analytics 
-# Leah N. Crowley - Fall 2023 
+---
+title: "Chronic Diseases and an Aging Population"
+author: "Leah N. Crowley"
+date: "2023-10-05"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+---
+![](C:/Users/lcrowley1/OneDrive%20-%20Austin%20Peay%20State%20University/Desktop/cd1.png)  
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	message = FALSE,
+	warning = FALSE,
+	include = FALSE)
 
 # Call requried packages to workspace: 
   library(ggplot2)
@@ -11,6 +25,7 @@
   library(dplyr)
   library(easystats)
   library(MASS)
+  library(knitr)
 
 # Read in data you are using for this assignment: 
   diseases <- read.csv("diseases.csv")
@@ -18,9 +33,17 @@
 # Separate by gender:
   men.diseases <- filter(diseases, male_gender == "1")
   women.diseases <- filter(diseases, male_gender == "0") 
+```
 
-# TOTAL DISEASES
- 
+# Data
+I found the data for this assignment on Dryad. I decided to step out of my ecological comfort zone and chose data about human health and disease from a study that looked at chronic disease prevalence in an aging population.
+
+#Total diseases
+First, I looked at how age and the total number of chronic diseases an individual has interact for men and for women.
+
+## Men
+```{r Men - Chronic Visualizations, echo=TRUE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
 # Does the number of chronic diseases a man gets in his lifetime increase with age?
   ggplot(men.diseases, aes(age, total_diseases)) +
     geom_smooth(method="glm", method.args=list(family="poisson"(link="log")), color="darkblue") +
@@ -37,6 +60,10 @@
     xlab("Total Number of Chronic Diseases an Individual Has")+
     geom_vline(aes(xintercept=mean(total_diseases)),color="black", linetype="dashed", size=1)
   
+```
+
+```{r Men - Chronic Models, echo=TRUE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
 # Poisson model:
   model_mendis_poisson <- glm(total_diseases ~ age, family = poisson, data=men.diseases)
   summary(model_mendis_poisson) 
@@ -50,8 +77,11 @@
 
 # Check model: 
   autoplot(model_mendis_quasi) 
+```
 
-  
+## Women
+```{r Women - Chronic Visualization, echo=TRUE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
 # What about with women?
   ggplot(women.diseases, aes(age, total_diseases)) +
     geom_smooth(method="glm", method.args=list(family="poisson"(link="log")), color="deeppink") +
@@ -67,7 +97,11 @@
     ylab("Count (Women)")+
     xlab("Total Number of Chronic Diseases an Individual Has")+
     geom_vline(aes(xintercept=mean(total_diseases)),color="black", linetype="dashed", size=1)
+    
+```
 
+```{r Women - Chonic Model, echo=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
 # Poisson model:
   model_womdis_poisson <- glm(total_diseases ~ age, family = poisson, data=women.diseases)
   summary(model_womdis_poisson)  
@@ -80,10 +114,16 @@
   summary(model_womdis_quasi)
   
 # Check model: 
-  autoplot(model_womdis_quasi)  
+  autoplot(model_womdis_quasi)
   
-# CARDIOVASCULAR DISEASES 
-  
+```
+
+# Cardiovascular diseases
+Next, I looked at how age and the number of chronic *cardiovascular* diseases an individual has interact for men and for women.
+
+## Men
+```{r Men - Cardio Visualization, echo=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
 # Does the number of chronic cardiovascular disease a man gets in his lifetime increase with age?
   ggplot(men.diseases, aes(age, cardio_disease)) +
     geom_smooth(method="glm", method.args=list(family="poisson"(link="log")), color="darkblue") +
@@ -99,7 +139,17 @@
     ylab("Count (Men)")+
     xlab("Total Number of Chronic Cardiovascular Diseases an Individual Has")+
     geom_vline(aes(xintercept=mean(total_diseases)),color="black", linetype="dashed", size=1)
-  
+
+```
+
+```{r Men - Cardio Model, echo=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+## Women
+```{r Women - Cardio Visualization, echo=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
 # What about with women?
   ggplot(women.diseases, aes(age, cardio_disease)) +
     geom_smooth(method="glm", method.args=list(family="poisson"(link="log")), color="deeppink") +
@@ -115,4 +165,11 @@
     ylab("Count (Women)")+
     xlab("Total Number of Chronic Cardiovascular Diseases an Individual Has")+
     geom_vline(aes(xintercept=mean(total_diseases)),color="black", linetype="dashed", size=1)
-  
+
+```
+
+```{r Women - Cardio Model, echo=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+
+```
