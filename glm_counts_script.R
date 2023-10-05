@@ -100,6 +100,14 @@
     xlab("Total Number of Chronic Cardiovascular Diseases an Individual Has")+
     geom_vline(aes(xintercept=mean(total_diseases)),color="black", linetype="dashed", size=1)
   
+# Poisson model:
+  model_mencar_poisson <- glm(cardio_disease ~ age, family = poisson, data=men.diseases)
+  summary(model_mencar_poisson) 
+  # Much better-dispersed than total diseases! 
+  
+# Check model: 
+  autoplot(model_mencar_poisson)
+  
 # What about with women?
   ggplot(women.diseases, aes(age, cardio_disease)) +
     geom_smooth(method="glm", method.args=list(family="poisson"(link="log")), color="deeppink") +
@@ -115,4 +123,19 @@
     ylab("Count (Women)")+
     xlab("Total Number of Chronic Cardiovascular Diseases an Individual Has")+
     geom_vline(aes(xintercept=mean(total_diseases)),color="black", linetype="dashed", size=1)
+  
+# Poisson model:
+  model_womcar_poisson <- glm(cardio_disease ~ age, family = poisson, data=women.diseases)
+  summary(model_womcar_poisson) 
+  # Better dispersion than total diseases, but still rather overdispersed.
+  
+# Check model: 
+  autoplot(model_womcar_poisson)
+  
+# Compensate for overdispersion by using quasipoisson model: 
+  model_womcar_quasi <- glm(cardio_disease ~ age, family = quasipoisson, data = women.diseases)
+  summary(model_womcar_quasi)
+  
+# Check model: 
+  autoplot(model_womcar_quasi)
   

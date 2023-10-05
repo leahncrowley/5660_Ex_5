@@ -8,6 +8,9 @@ output:
     toc_float: true
 ---
 
+[]("C:/Users/lcrowley1/OneDrive - Austin Peay State University/Desktop/Advanced/5-GLMs-count/5660_Ex_5/cd1.png")
+---
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
 	message = FALSE,
@@ -36,7 +39,7 @@ knitr::opts_chunk$set(
 
 # Data
 
-I found the data for this assignment on Dryad. I decided to step out of my ecological comfort zone and chose data about human health and disease from a study that looked at chronic disease prevalence in an aging population.
+I found the data for this assignment on Dryad. I decided to step out of my ecological comfort zone and chose data about human health and disease from a study that looked at chronic disease prevalence in an aging population.10,000 individuals were surveyed; possible chronic diseases individuals reported included hypertension, CHD, lipid disorder, stroke, heart failure, cancer, diabetes, COPD, osteoporosis, and chronic kidney disease.
 
 # Total diseases
 
@@ -44,7 +47,7 @@ First, I looked at how age and the total number of chronic diseases an individua
 
 ## Men
 
-```{r Men Chronic Visualizations, message=FALSE, warning=FALSE}
+```{r Men Chronic Visualizations, echo=TRUE}
 knitr::opts_chunk$set(echo = TRUE)
 # Does the number of chronic diseases a man gets in his lifetime increase with age?
   ggplot(men.diseases, aes(age, total_diseases)) +
@@ -64,7 +67,7 @@ knitr::opts_chunk$set(echo = TRUE)
   
 ```
 
-```{r Men Chronic Models, message=FALSE, warning=FALSE}
+```{r Men Chronic Models, echo=TRUE}
 knitr::opts_chunk$set(echo = TRUE)
 # Poisson model:
   model_mendis_poisson <- glm(total_diseases ~ age, family = poisson, data=men.diseases)
@@ -103,7 +106,7 @@ knitr::opts_chunk$set(echo = TRUE)
     
 ```
 
-```{r Women Chonic Model, message=FALSE, warning=FALSE}
+```{r Women Chronic Model, echo=TRUE}
 knitr::opts_chunk$set(echo = TRUE)
 # Poisson model:
   model_womdis_poisson <- glm(total_diseases ~ age, family = poisson, data=women.diseases)
@@ -127,7 +130,7 @@ Next, I looked at how age and the number of chronic *cardiovascular* diseases an
 
 ## Men
 
-```{r Men Cardio Visualization, echo=FALSE, message=FALSE, warning=FALSE}
+```{r Men Cardio Visualization, echo=TRUE}
 knitr::opts_chunk$set(echo = TRUE)
 # Does the number of chronic cardiovascular disease a man gets in his lifetime increase with age?
   ggplot(men.diseases, aes(age, cardio_disease)) +
@@ -147,14 +150,21 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```
 
-```{r Men Cardio Model, echo=FALSE, message=FALSE, warning=FALSE}
+```{r Men Cardio Model, echo=TRUE}
 knitr::opts_chunk$set(echo = TRUE)
-
+# Poisson model:
+  model_mencar_poisson <- glm(cardio_disease ~ age, family = poisson, data=men.diseases)
+  summary(model_mencar_poisson) 
+  # Much better-dispersed than total diseases! 
+  
+# Check model: 
+  autoplot(model_mencar_poisson)
+  
 ```
 
 ## Women
 
-```{r Women Cardio Visualization, echo=FALSE, message=FALSE, warning=FALSE}
+```{r Women Cardio Visualization, echo=TRUE}
 knitr::opts_chunk$set(echo = TRUE)
 # What about with women?
   ggplot(women.diseases, aes(age, cardio_disease)) +
@@ -174,8 +184,22 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```
 
-```{r Women Cardio Model, echo=FALSE, message=FALSE, warning=FALSE}
+```{r Women Cardio Model, echo=TRUE}
 knitr::opts_chunk$set(echo = TRUE)
-
+# Poisson model:
+  model_womcar_poisson <- glm(cardio_disease ~ age, family = poisson, data=women.diseases)
+  summary(model_womcar_poisson) 
+  # Better dispersion than total diseases, but still rather overdispersed.
+  
+# Check model: 
+  autoplot(model_womcar_poisson)
+  
+# Compensate for overdispersion by using quasipoisson model: 
+  model_womcar_quasi <- glm(cardio_disease ~ age, family = quasipoisson, data = women.diseases)
+  summary(model_womcar_quasi)
+  
+# Check model: 
+  autoplot(model_womcar_quasi)
+  
 
 ```
