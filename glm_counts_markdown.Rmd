@@ -8,7 +8,7 @@ output:
     toc_float: true
 ---
 
-[]("C:/Users/lcrowley1/OneDrive - Austin Peay State University/Desktop/Advanced/5-GLMs-count/5660_Ex_5/cd1.png")
+![](C:/Users/lcrowley1/OneDrive - Austin Peay State University/Desktop/Advanced/5-GLMs-count/5660_Ex_5/cd1.png)
 ---
 
 ```{r setup, include=FALSE}
